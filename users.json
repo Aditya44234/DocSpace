@@ -14,5 +14,21 @@
         "uploaded_at": "2025-06-29T00:15:44.998784"
       }
     ]
+  },
+  "adityajoshi4002@gmail.com": {
+    "id": "6b971f80-747b-459b-aa64-7b1b6febf76c",
+    "name": "Adarsh joshi",
+    "email": "adityajoshi4002@gmail.com",
+    "password": "c2b6e1f87f1fb289ff787dc16e5a3a06dd1c19c7d70590ecef159b231607ef5f",
+    "created_at": "2025-06-29T00:34:36.152067",
+    "files": [
+      {
+        "id": "38078ae1-e8e7-4adb-85e6-73683a693987",
+        "original_name": "Nextjs_Intern_Assignment.docx.pdf",
+        "stored_name": "38078ae1-e8e7-4adb-85e6-73683a693987.pdf",
+        "size": 125577,
+        "uploaded_at": "2025-06-29T00:34:49.170290"
+      }
+    ]
   }
 }
