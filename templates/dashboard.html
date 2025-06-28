@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - DocuVault{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Your Documents</h2>
+        <p>Manage and access your uploaded files</p>
+    </div>
+    
+    <div class="upload-section">
+        <div class="upload-card">
+            <div id="uploadArea" class="upload-area">
+                <div class="upload-icon">📁</div>
+                <h3>Upload Documents</h3>
+                <p>Drag and drop files here or click to browse</p>
+                <input type="file" id="fileInput" multiple style="display: none;">
+                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                    Choose Files
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="files-section">
+        <h3>Your Files</h3>
+        {% if files %}
+        <div class="files-grid">
+            {% for file in files %}
+            <div class="file-card">
+                <div class="file-icon">📄</div>
+                <div class="file-info">
+                    <h4>{{ file.original_name }}</h4>
+                    <p>{{ (file.size / 1024) | round(2) }} KB</p>
+                    <p>{{ file.uploaded_at[:10] }}</p>
+                </div>
+                <div class="file-actions">
+                    <a href="{{ url_for('download_file', file_id=file.id) }}" class="btn btn-small btn-secondary">
+                        Download
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h3>No files uploaded yet</h3>
+            <p>Upload your first document to get started</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const uploadArea = document.getElementById('uploadArea');
+const fileInput = document.getElementById('fileInput');
+
+// Drag and drop functionality
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+});
+
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('drag-over');
+});
+
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        handleFileUpload(files[0]);
+    }
+});
+
+fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        handleFileUpload(e.target.files[0]);
+    }
+});
+
+async function handleFileUpload(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification(result.message, 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            showNotification(result.message, 'error');
+        }
+    } catch (error) {
+        showNotification('Upload failed. Please try again.', 'error');
+    }
+}
+</script>
+{% endblock %}

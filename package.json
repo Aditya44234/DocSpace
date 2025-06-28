@@ -1,0 +1,12 @@
+{
+  "name": "docuvault-storage-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Secure document storage web application",
+  "scripts": {
+    "dev": "python app.py",
+    "start": "python app.py"
+  },
+  "keywords": ["document", "storage", "flask", "file-upload"],
+  "author": "DocuVault Team"
+}
