@@ -98,8 +98,11 @@ def google_login():
     return redirect(url_for('dashboard'))
 # -------------------------------------------
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['GET','POST'])
 def signup():
+
+    if request.method == 'GET':
+        return render_template('signup.html')  # ✅ Add this
     data = request.get_json()
     name, email, password = data.get('name'), data.get('email'), data.get('password')
 
@@ -125,20 +128,32 @@ def signup():
     session.update(user_id=user_id, user_email=email, user_name=name)
     return jsonify(success=True, message="Account created successfully")
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.get_json()
-    email, password = data.get('email'), data.get('password')
-    if not all([email, password]):
-        return jsonify(success=False, message="Email and password are required")
+    # ── 1️⃣  serve the login page on GET ─────────────────
+    if request.method == 'GET':
+        return render_template('login.html')   # show your form / page
+
+    # ── 2️⃣  handle the form or fetch POST ───────────────
+    # If sent via fetch() → JSON; if <form> → request.form
+    data = request.get_json(silent=True) or request.form
+
+    email    = data.get('email')
+    password = data.get('password')
+    if not email or not password:
+        return jsonify(success=False,
+                       message="Email and password are required")
 
     users = load_users()
     user  = users.get(email)
-    if not user or user["password"] != hash_password(password):
+    if not user or user['password'] != hash_password(password):
         return jsonify(success=False, message="Invalid credentials")
 
-    session.update(user_id=user['id'], user_email=email, user_name=user['name'])
+    session.update(user_id=user['id'],
+                   user_email=email,
+                   user_name=user['name'])
     return jsonify(success=True, message="Login successful")
+
 
 @app.route('/dashboard')
 def dashboard():
