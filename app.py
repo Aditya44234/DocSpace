@@ -157,7 +157,7 @@ def upload_file():
         return jsonify(success=False, message="Not authenticated")
 
     file = request.files.get('file')
-    if not file or file.filename == '':
+    if not file or not file.filename or file.filename == '':
         return jsonify(success=False, message='No file selected')
 
     filename       = secure_filename(file.filename)
