@@ -1,5 +1,5 @@
 {
-  "name": "docuvault-storage-app",
+  "name": "DocSpace-storage-app",
   "private": true,
   "version": "1.0.0",
   "description": "Secure document storage web application",
@@ -8,5 +8,5 @@
     "start": "python app.py"
   },
   "keywords": ["document", "storage", "flask", "file-upload"],
-  "author": "DocuVault Team"
+  "author": "AJ"
 }

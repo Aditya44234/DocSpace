@@ -1,2 +1,8 @@
 Flask==3.1.1
 gunicorn==22.0.0
+flask-dance
+oauthlib
+requests
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
